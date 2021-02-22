@@ -9,25 +9,24 @@
  */
 package org.openmrs.liquibase;
 
-import java.io.File;
 import java.io.IOException;
-import org.dom4j.DocumentException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.dom4j.DocumentException;
 
 public class Main {
 	
-	public static final String LIQUIBASE_CORE_DATA_SOURCE_PATH = Paths.get(".",
-			"snapshots", "liquibase-core-data-SNAPSHOT.xml").toString();
+	public static final String LIQUIBASE_CORE_DATA_SOURCE_PATH = Paths
+	        .get(".", "snapshots", "liquibase-core-data-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_CORE_DATA_TARGET_PATH = Paths.get(".",
-			"snapshots", "liquibase-core-data-UPDATED-SNAPSHOT.xml").toString();
+	public static final String LIQUIBASE_CORE_DATA_TARGET_PATH = Paths
+	        .get(".", "snapshots", "liquibase-core-data-UPDATED-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH = Paths.get(".", 
-			"snapshots", "liquibase-schema-only-SNAPSHOT.xml").toString();
+	public static final String LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH = Paths
+	        .get(".", "snapshots", "liquibase-schema-only-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_SCHEMA_ONLY_TARGET_PATH = Paths.get(".", 
-			"snapshots", "liquibase-schema-only-UPDATED-SNAPSHOT.xml").toString();
+	public static final String LIQUIBASE_SCHEMA_ONLY_TARGET_PATH = Paths
+	        .get(".", "snapshots", "liquibase-schema-only-UPDATED-SNAPSHOT.xml").toString();
 	
 	private static CoreDataTuner coreDataTuner;
 	
@@ -39,10 +38,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws DocumentException, IOException {
-		coreDataTuner.addLicenseHeaderToFileIfNeeded( LIQUIBASE_CORE_DATA_SOURCE_PATH );
+		coreDataTuner.addLicenseHeaderToFileIfNeeded(LIQUIBASE_CORE_DATA_SOURCE_PATH);
 		coreDataTuner.createUpdatedChangeLogFile(LIQUIBASE_CORE_DATA_SOURCE_PATH, LIQUIBASE_CORE_DATA_TARGET_PATH);
-
-		schemaOnlyTuner.addLicenseHeaderToFileIfNeeded( LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH );
+		
+		schemaOnlyTuner.addLicenseHeaderToFileIfNeeded(LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH);
 		schemaOnlyTuner.createUpdatedChangeLogFile(LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH, LIQUIBASE_SCHEMA_ONLY_TARGET_PATH);
 	}
 	

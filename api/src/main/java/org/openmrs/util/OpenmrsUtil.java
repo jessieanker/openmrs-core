@@ -125,7 +125,7 @@ import org.w3c.dom.DocumentType;
  * Utility methods used in openmrs
  */
 public class OpenmrsUtil {
-
+	
 	private OpenmrsUtil() {
 	}
 	
@@ -281,10 +281,10 @@ public class OpenmrsUtil {
 	 * 
 	 * @param inputStream Stream to copy from
 	 * @param outputStream Stream/location to copy to
-	 * @throws IOException thrown if an error occurs during read/write
-	 * <strong>Should</strong> not copy the outputstream if outputstream is null
-	 * <strong>Should</strong> not copy the outputstream if inputstream is null
-	 * <strong>Should</strong> copy inputstream to outputstream and close the outputstream
+	 * @throws IOException thrown if an error occurs during read/write <strong>Should</strong> not
+	 *             copy the outputstream if outputstream is null <strong>Should</strong> not copy
+	 *             the outputstream if inputstream is null <strong>Should</strong> copy inputstream
+	 *             to outputstream and close the outputstream
 	 */
 	public static void copyFile(InputStream inputStream, OutputStream outputStream) throws IOException {
 		
@@ -333,7 +333,7 @@ public class OpenmrsUtil {
 		if (!folder.isDirectory()) {
 			return false;
 		}
-
+		
 		File[] files = folder.listFiles();
 		if (files == null) {
 			return false;
@@ -488,22 +488,23 @@ public class OpenmrsUtil {
 			val = OpenmrsConstants.DATABASE_NAME;
 		}
 		OpenmrsConstants.DATABASE_BUSINESS_NAME = val;
-
+		
 		setupLogAppenders();
-
+		
 		// set global log level
 		applyLogLevels();
 	}
 	
 	/**
-	 * Gets the in-memory log appender. This method needed to be added as it is much more difficult to
-	 * get a specific appender in the Log4J2 architecture. This method is called in places where we need
-	 * to display logging message.
+	 * Gets the in-memory log appender. This method needed to be added as it is much more difficult
+	 * to get a specific appender in the Log4J2 architecture. This method is called in places where
+	 * we need to display logging message.
 	 *
 	 * @since 2.4.0
 	 */
 	public static MemoryAppender getMemoryAppender() {
-		MemoryAppender memoryAppender = ((LoggerContext) LogManager.getContext()).getConfiguration().getAppender("MEMORY_APPENDER");
+		MemoryAppender memoryAppender = ((LoggerContext) LogManager.getContext()).getConfiguration()
+		        .getAppender("MEMORY_APPENDER");
 		if (memoryAppender != null) {
 			if (!memoryAppender.isStarted()) {
 				memoryAppender.start();
@@ -521,11 +522,11 @@ public class OpenmrsUtil {
 	public static void applyLogLevels() {
 		AdministrationService adminService = Context.getAdministrationService();
 		String logLevel = adminService.getGlobalProperty(OpenmrsConstants.GLOBAL_PROPERTY_LOG_LEVEL, "");
-
+		
 		// reload the configuration from disk
 		LoggerContext context = ((Logger) LogManager.getRootLogger()).getContext();
 		context.reconfigure();
-
+		
 		String[] levels = logLevel.split(",");
 		for (String level : levels) {
 			String[] classAndLevel = level.split(":");
@@ -538,7 +539,7 @@ public class OpenmrsUtil {
 			}
 		}
 	}
-
+	
 	/**
 	 * Setup root level log appenders.
 	 *
@@ -547,49 +548,41 @@ public class OpenmrsUtil {
 	public static void setupLogAppenders() {
 		Logger rootLogger = (Logger) LogManager.getRootLogger();
 		LoggerContext loggerContext = rootLogger.getContext();
-
+		
 		// stop the LoggerContext to reconfigure the scanning interval
 		loggerContext.stop();
 		// previously set in web.xml
 		loggerContext.getConfiguration().getWatchManager().setIntervalSeconds(60000);
 		loggerContext.start();
-
+		
 		RollingFileAppender fileAppender = null;
 		for (Map.Entry<String, Appender> appenderEntry : rootLogger.getAppenders().entrySet()) {
 			Appender appender = appenderEntry.getValue();
-			if (appender instanceof RollingFileAppender && OpenmrsConstants.LOG_OPENMRS_FILE_APPENDER
-				.equals(appender.getName())) {
+			if (appender instanceof RollingFileAppender
+			        && OpenmrsConstants.LOG_OPENMRS_FILE_APPENDER.equals(appender.getName())) {
 				fileAppender = (RollingFileAppender) appender;
 				break;
 			}
 		}
-
+		
 		if (fileAppender != null) {
 			rootLogger.removeAppender(fileAppender);
 		}
-
+		
 		String logLayout = Context.getAdministrationService().getGlobalProperty(OpenmrsConstants.GP_LOG_LAYOUT,
-			"%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n");
-		PatternLayout patternLayout = PatternLayout.newBuilder()
-			.withPattern(logLayout)
-			.build();
-
+		    "%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n");
+		PatternLayout patternLayout = PatternLayout.newBuilder().withPattern(logLayout).build();
+		
 		String logLocation = OpenmrsUtil.getOpenmrsLogLocation();
 		String logPattern = logLocation.replace(".log", ".%i.log");
-		fileAppender = RollingFileAppender.newBuilder()
-			.setLayout(patternLayout)
-			.withFileName(logLocation)
-			.withFilePattern(logPattern)
-			.setName(OpenmrsConstants.LOG_OPENMRS_FILE_APPENDER)
-			.withPolicy(CompositeTriggeringPolicy.createPolicy(
-				OnStartupTriggeringPolicy.createPolicy(1),
-				SizeBasedTriggeringPolicy.createPolicy("10MB")
-			))
-			.withStrategy(DefaultRolloverStrategy.newBuilder().withMax("1").build())
-			.build();
+		fileAppender = RollingFileAppender.newBuilder().setLayout(patternLayout).withFileName(logLocation)
+		        .withFilePattern(logPattern).setName(OpenmrsConstants.LOG_OPENMRS_FILE_APPENDER)
+		        .withPolicy(CompositeTriggeringPolicy.createPolicy(OnStartupTriggeringPolicy.createPolicy(1),
+		            SizeBasedTriggeringPolicy.createPolicy("10MB")))
+		        .withStrategy(DefaultRolloverStrategy.newBuilder().withMax("1").build()).build();
 		fileAppender.start();
 		rootLogger.addAppender(fileAppender);
-
+		
 		// update the logger configuration
 		loggerContext.updateLoggers();
 	}
@@ -635,11 +628,11 @@ public class OpenmrsUtil {
 					configuration.setLevel(Level.FATAL);
 					break;
 				default:
-					log.warn("Log level {} is invalid. " +
-						"Valid values are trace, debug, info, warn, error or fatal", logLevel);
+					log.warn("Log level {} is invalid. " + "Valid values are trace, debug, info, warn, error or fatal",
+					    logLevel);
 					break;
 			}
-
+			
 			context.updateLoggers();
 		}
 	}
@@ -759,7 +752,8 @@ public class OpenmrsUtil {
 	 * @param c Collection to be joined
 	 * @param separator string to put between all elements
 	 * @return a String representing the toString() of all elements in c, separated by separator
-	 * @deprecated as of 2.2 use Java's {@link String#join} or Apache Commons StringUtils.join for iterables which do not extend {@link CharSequence}
+	 * @deprecated as of 2.2 use Java's {@link String#join} or Apache Commons StringUtils.join for
+	 *             iterables which do not extend {@link CharSequence}
 	 */
 	@Deprecated
 	public static <E> String join(Collection<E> c, String separator) {
@@ -974,7 +968,7 @@ public class OpenmrsUtil {
 		if (fileList == null) {
 			return false;
 		}
-
+		
 		for (File f : fileList) {
 			if (f.isDirectory()) {
 				deleteDirectory(f);
@@ -1009,7 +1003,7 @@ public class OpenmrsUtil {
 	 * 
 	 * @param url an URL
 	 * @return file object for given URL or <code>null</code> if URL is not local
-	 * <strong>Should</strong> return null given null parameter
+	 *         <strong>Should</strong> return null given null parameter
 	 */
 	public static File url2file(final URL url) {
 		if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
@@ -1100,30 +1094,24 @@ public class OpenmrsUtil {
 		
 		if (filepath == null) {
 			if (OpenmrsConstants.UNIX_BASED_OPERATING_SYSTEM) {
-				//filepath = System.getProperty("user.home") + File.separator + "." + openmrsDir;
-				filepath = Paths.get(System.getProperty("user.home"),".",openmrsDir).toString();
+				filepath = Paths.get(System.getProperty("user.home"), ".", openmrsDir).toString();
 				if (!canWrite(new File(filepath))) {
 					log.warn("Unable to write to users home dir, fallback to: "
 					        + OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_UNIX);
-				//	filepath = OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_UNIX + File.separator + openmrsDir;
-				filepath = Paths.get(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_UNIX,openmrsDir).toString();
+					filepath = Paths.get(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_UNIX, openmrsDir).toString();
 				}
 			} else {
-				//filepath = System.getProperty("user.home") + File.separator + "Application Data" + File.separator
-				//        + "OpenMRS";
-				filepath = Paths.get(System.getProperty("user.home"), "Application Data","OpenMRS").toString();
+				filepath = Paths.get(System.getProperty("user.home"), "Application Data", "OpenMRS").toString();
 				if (!canWrite(new File(filepath))) {
 					log.warn("Unable to write to users home dir, fallback to: "
 					        + OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_WIN);
-				//	filepath = OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_WIN + File.separator + openmrsDir;
-				filepath = Paths.get(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_WIN, openmrsDir).toString();
+					filepath = Paths.get(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_WIN, openmrsDir).toString();
 				}
 			}
 			
-			filepath = filepath + File.separator;
 		}
 		
-		File folder = new File(filepath);
+		File folder = Paths.get(filepath).toFile();
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
@@ -1277,7 +1265,7 @@ public class OpenmrsUtil {
 			token = token.trim();
 			if (token.length() != 0) {
 				ret.add(Integer.valueOf(token));
-			} 
+			}
 		}
 		return ret;
 	}
@@ -1386,9 +1374,8 @@ public class OpenmrsUtil {
 	 * Get the current user's date format Will look similar to "mm-dd-yyyy". Depends on user's
 	 * locale.
 	 * 
-	 * @return a simple date format
-	 * <strong>Should</strong> return a pattern with four y characters in it
-	 * <strong>Should</strong> not allow the returned SimpleDateFormat to be modified
+	 * @return a simple date format <strong>Should</strong> return a pattern with four y characters
+	 *         in it <strong>Should</strong> not allow the returned SimpleDateFormat to be modified
 	 * @since 1.5
 	 */
 	public static SimpleDateFormat getDateFormat(Locale locale) {
@@ -1430,9 +1417,8 @@ public class OpenmrsUtil {
 	/**
 	 * Get the current user's time format Will look similar to "hh:mm a". Depends on user's locale.
 	 * 
-	 * @return a simple time format
-	 * <strong>Should</strong> return a pattern with two h characters in it
-	 * <strong>Should</strong> not allow the returned SimpleDateFormat to be modified
+	 * @return a simple time format <strong>Should</strong> return a pattern with two h characters
+	 *         in it <strong>Should</strong> not allow the returned SimpleDateFormat to be modified
 	 * @since 1.9
 	 */
 	public static SimpleDateFormat getTimeFormat(Locale locale) {
@@ -1458,9 +1444,9 @@ public class OpenmrsUtil {
 	 * Get the current user's datetime format Will look similar to "mm-dd-yyyy hh:mm a". Depends on
 	 * user's locale.
 	 * 
-	 * @return a simple date format
-	 * <strong>Should</strong> return a pattern with four y characters and two h characters in it
-	 * <strong>Should</strong> not allow the returned SimpleDateFormat to be modified
+	 * @return a simple date format <strong>Should</strong> return a pattern with four y characters
+	 *         and two h characters in it <strong>Should</strong> not allow the returned
+	 *         SimpleDateFormat to be modified
 	 * @since 1.9
 	 */
 	public static SimpleDateFormat getDateTimeFormat(Locale locale) {
@@ -1578,9 +1564,10 @@ public class OpenmrsUtil {
 	 * 
 	 * @param objects collection to loop over
 	 * @param obj Object to look for in the <code>objects</code>
-	 * @return true/false whether the given object is found
-	 * <strong>Should</strong> use equals method for comparison instead of compareTo given List collection
-	 * <strong>Should</strong> use equals method for comparison instead of compareTo given SortedSet collection
+	 * @return true/false whether the given object is found <strong>Should</strong> use equals
+	 *         method for comparison instead of compareTo given List collection
+	 *         <strong>Should</strong> use equals method for comparison instead of compareTo given
+	 *         SortedSet collection
 	 */
 	public static boolean collectionContains(Collection<?> objects, Object obj) {
 		if (obj == null || objects == null) {
@@ -1854,30 +1841,28 @@ public class OpenmrsUtil {
 	 * @param password string that will be validated
 	 * @param systemId system id of the user with password to be validated
 	 * @throws PasswordException
-	 * @since 1.5
-	 * <strong>Should</strong> fail with short password by default
-	 * <strong>Should</strong> fail with short password if not allowed
-	 * <strong>Should</strong> pass with short password if allowed
-	 * <strong>Should</strong> fail with digit only password by default
-	 * <strong>Should</strong> fail with digit only password if not allowed
-	 * <strong>Should</strong> pass with digit only password if allowed
-	 * <strong>Should</strong> fail with char only password by default
-	 * <strong>Should</strong> fail with char only password if not allowed
-	 * <strong>Should</strong> pass with char only password if allowed
-	 * <strong>Should</strong> fail without both upper and lower case password by default
-	 * <strong>Should</strong> fail without both upper and lower case password if not allowed
-	 * <strong>Should</strong> pass without both upper and lower case password if allowed
-	 * <strong>Should</strong> fail with password equals to user name by default
-	 * <strong>Should</strong> fail with password equals to user name if not allowed
-	 * <strong>Should</strong> pass with password equals to user name if allowed
-	 * <strong>Should</strong> fail with password equals to system id by default
-	 * <strong>Should</strong> fail with password equals to system id if not allowed
-	 * <strong>Should</strong> pass with password equals to system id if allowed
-	 * <strong>Should</strong> fail with password not matching configured regex
-	 * <strong>Should</strong> pass with password matching configured regex
-	 * <strong>Should</strong> allow password to contain non alphanumeric characters
-	 * <strong>Should</strong> allow password to contain white spaces
-	 * <strong>Should</strong> still work without an open session
+	 * @since 1.5 <strong>Should</strong> fail with short password by default
+	 *        <strong>Should</strong> fail with short password if not allowed
+	 *        <strong>Should</strong> pass with short password if allowed <strong>Should</strong>
+	 *        fail with digit only password by default <strong>Should</strong> fail with digit only
+	 *        password if not allowed <strong>Should</strong> pass with digit only password if
+	 *        allowed <strong>Should</strong> fail with char only password by default
+	 *        <strong>Should</strong> fail with char only password if not allowed
+	 *        <strong>Should</strong> pass with char only password if allowed
+	 *        <strong>Should</strong> fail without both upper and lower case password by default
+	 *        <strong>Should</strong> fail without both upper and lower case password if not allowed
+	 *        <strong>Should</strong> pass without both upper and lower case password if allowed
+	 *        <strong>Should</strong> fail with password equals to user name by default
+	 *        <strong>Should</strong> fail with password equals to user name if not allowed
+	 *        <strong>Should</strong> pass with password equals to user name if allowed
+	 *        <strong>Should</strong> fail with password equals to system id by default
+	 *        <strong>Should</strong> fail with password equals to system id if not allowed
+	 *        <strong>Should</strong> pass with password equals to system id if allowed
+	 *        <strong>Should</strong> fail with password not matching configured regex
+	 *        <strong>Should</strong> pass with password matching configured regex
+	 *        <strong>Should</strong> allow password to contain non alphanumeric characters
+	 *        <strong>Should</strong> allow password to contain white spaces <strong>Should</strong>
+	 *        still work without an open session
 	 */
 	public static void validatePassword(String username, String password, String systemId) throws PasswordException {
 		
@@ -1961,9 +1946,9 @@ public class OpenmrsUtil {
 	/**
 	 * @param test the string to test
 	 * @return true if the passed string contains both upper and lower case characters
-	 * <strong>Should</strong> return true if string contains upper and lower case
-	 * <strong>Should</strong> return false if string does not contain lower case characters
-	 * <strong>Should</strong> return false if string does not contain upper case characters
+	 *         <strong>Should</strong> return true if string contains upper and lower case
+	 *         <strong>Should</strong> return false if string does not contain lower case characters
+	 *         <strong>Should</strong> return false if string does not contain upper case characters
 	 */
 	public static boolean containsUpperAndLowerCase(String test) {
 		if (test != null) {
@@ -1976,9 +1961,9 @@ public class OpenmrsUtil {
 	
 	/**
 	 * @param test the string to test
-	 * @return true if the passed string contains only numeric characters
-	 * <strong>Should</strong> return true if string contains only digits
-	 * <strong>Should</strong> return false if string contains any non-digits
+	 * @return true if the passed string contains only numeric characters <strong>Should</strong>
+	 *         return true if string contains only digits <strong>Should</strong> return false if
+	 *         string contains any non-digits
 	 */
 	public static boolean containsOnlyDigits(String test) {
 		if (test != null) {
@@ -1993,9 +1978,9 @@ public class OpenmrsUtil {
 	
 	/**
 	 * @param test the string to test
-	 * @return true if the passed string contains any numeric characters
-	 * <strong>Should</strong> return true if string contains any digits
-	 * <strong>Should</strong> return false if string contains no digits
+	 * @return true if the passed string contains any numeric characters <strong>Should</strong>
+	 *         return true if string contains any digits <strong>Should</strong> return false if
+	 *         string contains no digits
 	 */
 	public static boolean containsDigit(String test) {
 		if (test != null) {
@@ -2030,9 +2015,8 @@ public class OpenmrsUtil {
 	 * length
 	 * 
 	 * @param stackTrace original stack trace from an error
-	 * @return shortened stack trace
-	 * <strong>Should</strong> return null if stackTrace is null
-	 * <strong>Should</strong> remove springframework and reflection related lines
+	 * @return shortened stack trace <strong>Should</strong> return null if stackTrace is null
+	 *         <strong>Should</strong> remove springframework and reflection related lines
 	 * @since 1.7
 	 */
 	public static String shortenedStackTrace(String stackTrace) {
@@ -2202,9 +2186,8 @@ public class OpenmrsUtil {
 	 * 
 	 * @param s1 the string to compare
 	 * @param s2 the string to compare
-	 * @return true if strings are equal (ignoring case)
-	 * <strong>Should</strong> return false if only one of the strings is null
-	 * <strong>Should</strong> be case insensitive
+	 * @return true if strings are equal (ignoring case) <strong>Should</strong> return false if
+	 *         only one of the strings is null <strong>Should</strong> be case insensitive
 	 * @since 1.8
 	 */
 	public static boolean nullSafeEqualsIgnoreCase(String s1, String s2) {

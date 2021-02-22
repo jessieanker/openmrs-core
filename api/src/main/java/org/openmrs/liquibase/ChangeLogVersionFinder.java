@@ -9,7 +9,7 @@
  */
 package org.openmrs.liquibase;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import org.openmrs.module.VersionComparator;
 
 /**
@@ -28,15 +29,13 @@ import org.openmrs.module.VersionComparator;
  */
 public class ChangeLogVersionFinder {
 	
-	static final String BASE_FOLDER_NAME = "org" + File.separator + "openmrs" + File.separator + "liquibase";
+	static final String BASE_FOLDER_NAME = Paths.get("org", "openmrs", "liquibase").toString();
 	
-	static final String CORE_DATA_FOLDER_NAME = BASE_FOLDER_NAME + File.separator + "snapshots" + File.separator
-	        + "core-data";
+	static final String CORE_DATA_FOLDER_NAME = Paths.get(BASE_FOLDER_NAME, "snapshots", "core-data").toString();
 	
-	static final String SCHEMA_ONLY_FOLDER_NAME = BASE_FOLDER_NAME + File.separator + "snapshots" + File.separator
-	        + "schema-only";
+	static final String SCHEMA_ONLY_FOLDER_NAME = Paths.get(BASE_FOLDER_NAME, "snapshots", "schema-only").toString();
 	
-	static final String UPDATES_FOLDER_NAME = BASE_FOLDER_NAME + File.separator + "updates";
+	static final String UPDATES_FOLDER_NAME = Paths.get(BASE_FOLDER_NAME, "updates").toString();
 	
 	static final String CORE_DATA_BASE_NAME = "liquibase-core-data-";
 	
@@ -100,8 +99,8 @@ public class ChangeLogVersionFinder {
 	
 	public List<String> getSnapshotFilenames(String version) {
 		String versionAsDotX = getVersionAsDotX(version);
-		return Arrays.asList(SCHEMA_ONLY_FOLDER_NAME + File.separator + SCHEMA_ONLY_BASE_NAME + versionAsDotX + DOT_XML,
-		    CORE_DATA_FOLDER_NAME + File.separator + CORE_DATA_BASE_NAME + versionAsDotX + DOT_XML);
+		return Arrays.asList(Paths.get(SCHEMA_ONLY_FOLDER_NAME, SCHEMA_ONLY_BASE_NAME + versionAsDotX + DOT_XML).toString(),
+		    Paths.get(CORE_DATA_FOLDER_NAME, CORE_DATA_BASE_NAME + versionAsDotX + DOT_XML).toString());
 	}
 	
 	public Optional<String> getLatestSnapshotVersion() {
@@ -109,13 +108,13 @@ public class ChangeLogVersionFinder {
 	}
 	
 	public Optional<String> getLatestSchemaSnapshotFilename() {
-		return getLatestSnapshotVersion().map(
-			snapshotVersion -> SCHEMA_ONLY_FOLDER_NAME + File.separator + SCHEMA_ONLY_BASE_NAME + snapshotVersion + DOT_XML);
+		return getLatestSnapshotVersion().map(snapshotVersion -> Paths
+		        .get(SCHEMA_ONLY_FOLDER_NAME, SCHEMA_ONLY_BASE_NAME + snapshotVersion + DOT_XML).toString());
 	}
 	
 	public Optional<String> getLatestCoreDataSnapshotFilename() {
 		return getLatestSnapshotVersion().map(
-			snapshotVersion -> CORE_DATA_FOLDER_NAME + File.separator + CORE_DATA_BASE_NAME + snapshotVersion + DOT_XML);
+		    snapshotVersion -> Paths.get(CORE_DATA_FOLDER_NAME, CORE_DATA_BASE_NAME + snapshotVersion + DOT_XML).toString());
 	}
 	
 	public List<String> getUpdateVersionsGreaterThan(String otherVersion) {
@@ -129,7 +128,7 @@ public class ChangeLogVersionFinder {
 	
 	public List<String> getUpdateFileNames(List<String> versions) {
 		return versions.stream()
-		        .map(version -> UPDATES_FOLDER_NAME + File.separator + UPDATE_TO_LATEST_BASE_NAME + version + DOT_XML)
+		        .map(version -> Paths.get(UPDATES_FOLDER_NAME, UPDATE_TO_LATEST_BASE_NAME + version + DOT_XML).toString())
 		        .collect(Collectors.toList());
 	}
 	

@@ -18,6 +18,7 @@ import static org.openmrs.module.ModuleFactory.getStartedModules;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,8 +35,6 @@ import org.springframework.context.support.AbstractRefreshableApplicationContext
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * ModuleActivator tests that need refreshing the spring application context. The only reason why i
@@ -45,7 +44,8 @@ import java.nio.file.Paths;
  * out, just put these tests in ModuleActivatorTest NOTE: The way we start, stop, unload, etc,
  * modules is copied from ModuleListController
  */
-@ContextConfiguration(locations = { "classpath*:webModuleApplicationContext.xml" }, inheritLocations = true, loader = TestContextLoader.class)
+@ContextConfiguration(locations = {
+        "classpath*:webModuleApplicationContext.xml" }, inheritLocations = true, loader = TestContextLoader.class)
 @SkipBaseSetup
 public class WebModuleActivatorTest extends BaseModuleActivatorTest {
 	
@@ -291,7 +291,8 @@ public class WebModuleActivatorTest extends BaseModuleActivatorTest {
 	
 	@AfterEach
 	public void removeCurrentTransactionContext() throws Exception {
-		Class<?> clazz = OpenmrsClassLoader.getInstance().loadClass("org.springframework.test.context.transaction.TransactionContextHolder");
+		Class<?> clazz = OpenmrsClassLoader.getInstance()
+		        .loadClass("org.springframework.test.context.transaction.TransactionContextHolder");
 		Method method = clazz.getDeclaredMethod("removeCurrentTransactionContext");
 		ReflectionUtils.makeAccessible(method);
 		ReflectionUtils.invokeMethod(method, null);

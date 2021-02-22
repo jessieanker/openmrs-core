@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.util.ArrayList;
@@ -64,7 +65,6 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-import java.nio.file.Paths;
 
 /**
  * Our Listener class performs the basic starting functions for our webapp. Basic needs for starting
@@ -293,8 +293,8 @@ public final class Listener extends ContextLoader implements ServletContextListe
 		if (StringUtils.hasLength(appDataDir)) {
 			OpenmrsUtil.setApplicationDataDirectory(appDataDir);
 		} else if (!"openmrs".equalsIgnoreCase(WebConstants.WEBAPP_NAME)) {
-			OpenmrsUtil.setApplicationDataDirectory(Paths.get(
-			OpenmrsUtil.getApplicationDataDirectory(), WebConstants.WEBAPP_NAME).toString());
+			OpenmrsUtil.setApplicationDataDirectory(
+			    Paths.get(OpenmrsUtil.getApplicationDataDirectory(), WebConstants.WEBAPP_NAME).toString());
 		}
 	}
 	
@@ -320,16 +320,16 @@ public final class Listener extends ContextLoader implements ServletContextListe
 	 * @param servletContext
 	 */
 	private void clearDWRFile(ServletContext servletContext) {
-		File dwrFile = Paths.get(servletContext.getRealPath(""), "WEB-INF", "dwr-modules.xml").toFile(); 
-				
+		File dwrFile = Paths.get(servletContext.getRealPath(""), "WEB-INF", "dwr-modules.xml").toFile();
+		
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-
+			
 			// When asked to resolve external entities (such as a DTD) we return an InputSource
 			// with no data at the end, causing the parser to ignore the DTD.
 			db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
-
+			
 			Document doc = db.parse(dwrFile);
 			Element elem = doc.getDocumentElement();
 			elem.setTextContent("");
@@ -406,9 +406,10 @@ public final class Listener extends ContextLoader implements ServletContextListe
 								if (!f.getName().startsWith(".")) {
 									String tmpAbsolutePath = absolutePath + "/" + f.getName();
 									if (!copyFile(userOverridePath, tmpAbsolutePath)) {
-									log.warn("Unable to copy file in folder defined by runtime property: " + prop);
-									log.warn("Your source directory (or a file in it) '" + userOverridePath
-												+ " cannot be loaded or destination '" + tmpAbsolutePath + "' cannot be found");
+										log.warn("Unable to copy file in folder defined by runtime property: " + prop);
+										log.warn("Your source directory (or a file in it) '" + userOverridePath
+										        + " cannot be loaded or destination '" + tmpAbsolutePath
+										        + "' cannot be found");
 									}
 								}
 							}
@@ -475,8 +476,7 @@ public final class Listener extends ContextLoader implements ServletContextListe
 	 * @param servletContext the current servlet context for the webapp
 	 */
 	public static void loadBundledModules(ServletContext servletContext) {
-		File folder = Paths.get(servletContext.getRealPath(""), 
-				"WEB-INF", "bundledModules").toFile();
+		File folder = Paths.get(servletContext.getRealPath(""), "WEB-INF", "bundledModules").toFile();
 		
 		if (!folder.exists()) {
 			log.warn("Bundled module folder doesn't exist: " + folder.getAbsolutePath());
@@ -536,7 +536,7 @@ public final class Listener extends ContextLoader implements ServletContextListe
 				String filename = WebConstants.WEBAPP_NAME + "-test-runtime.properties";
 				File file = new File(OpenmrsUtil.getApplicationDataDirectory(), filename);
 				System.out.println(filename + " delete=" + file.delete());
-			
+				
 			}
 			// remove the user context that we set earlier
 			Context.closeSession();

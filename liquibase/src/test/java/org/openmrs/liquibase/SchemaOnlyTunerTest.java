@@ -9,13 +9,20 @@
  */
 package org.openmrs.liquibase;
 
-import java.io.File;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -26,22 +33,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class SchemaOnlyTunerTest {
 	
-	private static final String LIQUIBASE_SCHEMA_ONLY_SNAPSHOT_XML = Paths.get("org", "openmrs",
-	       "liquibase", "snapshots", "schema-only", "liquibase-schema-only-SNAPSHOT.xml").toString();
+	private static final String LIQUIBASE_SCHEMA_ONLY_SNAPSHOT_XML = Paths
+	        .get("org", "openmrs", "liquibase", "snapshots", "schema-only", "liquibase-schema-only-SNAPSHOT.xml").toString();
 	
-	private static final String LIQUIBASE_SCHEMA_ONLY_UPDATED_SNAPSHOT_XML = Paths.get("org", "openmrs", 
-			"liquibase", "snapshots", "schema-only", "liquibase-schema-only-UPDATED-SNAPSHOT.xml").toString();
+	private static final String LIQUIBASE_SCHEMA_ONLY_UPDATED_SNAPSHOT_XML = Paths
+	        .get("org", "openmrs", "liquibase", "snapshots", "schema-only", "liquibase-schema-only-UPDATED-SNAPSHOT.xml")
+	        .toString();
 	
 	private static String PATH_TO_TEST_RESOURCES = Paths.get("src", "test", "resources").toString();
 	
@@ -103,8 +102,7 @@ public class SchemaOnlyTunerTest {
 		List<Node> nodes = xpath.selectNodes(document);
 		assertEquals(94, nodes.size());
 		
-		// when
-		Document actual = schemaOnlyTuner.replaceBitWithBoolean(document);
+		schemaOnlyTuner.replaceBitWithBoolean(document);
 		
 		// then
 		for (Node node : nodes) {
@@ -123,7 +121,7 @@ public class SchemaOnlyTunerTest {
 		
 		// when
 		SchemaOnlyTuner schemaOnlyTunerSpy = Mockito.spy(schemaOnlyTuner);
-		Document actual = schemaOnlyTunerSpy.replaceLongtextWithClob(document);
+		schemaOnlyTunerSpy.replaceLongtextWithClob(document);
 		
 		// then
 		for (Node node : nodes) {

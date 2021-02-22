@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,24 +31,29 @@ public class ChangeLogVersionFinderTest {
 	
 	private static final char SLASH = '/';
 	
-	private static final String SNAPSHOTS_CORE_DATA_1_9_X_FILENAME = Paths.get("org", "openmrs", "liquibase", "snapshots", "core-data", 
-			"liquibase-core-data-1.9.x.xml").toString();
+	private static final String SNAPSHOTS_CORE_DATA_1_9_X_FILENAME = Paths
+	        .get("org", "openmrs", "liquibase", "snapshots", "core-data", "liquibase-core-data-1.9.x.xml").toString();
 	
-	private static final String SNAPSHOTS_SCHEMA_ONLY_1_9_X_FILENAME = Paths.get("org", "openmrs", "liquibase", "snapshots", "schema-only", 
-			"liquibase-schema-only-1.9.x.xml").toString();
+	private static final String SNAPSHOTS_SCHEMA_ONLY_1_9_X_FILENAME = Paths
+	        .get("org", "openmrs", "liquibase", "snapshots", "schema-only", "liquibase-schema-only-1.9.x.xml").toString();
 	
-	private static final String SNAPSHOTS_CORE_DATA_2_1_X_FILENAME = Paths.get("org", "openmrs", "liquibase", "snapshots", "core-data", 
-			"liquibase-core-data-2.1.x.xml").toString();
+	private static final String SNAPSHOTS_CORE_DATA_2_1_X_FILENAME = Paths
+	        .get("org", "openmrs", "liquibase", "snapshots", "core-data", "liquibase-core-data-2.1.x.xml").toString();
 	
-	private static final String SNAPSHOTS_SCHEMA_ONLY_2_1_X_FILENAME = Paths.get("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-2.1.x.xml").toString();
+	private static final String SNAPSHOTS_SCHEMA_ONLY_2_1_X_FILENAME = Paths
+	        .get("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-2.1.x.xml").toString();
 	
-	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_1_9_X_FILENAME = Paths.get("org/openmrs/liquibase/updates/liquibase-update-to-latest-1.9.x.xml").toString();
+	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_1_9_X_FILENAME = Paths
+	        .get("org/openmrs/liquibase/updates/liquibase-update-to-latest-1.9.x.xml").toString();
 	
-	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_0_X_FILENAME = Paths.get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.0.x.xml").toString();
+	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_0_X_FILENAME = Paths
+	        .get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.0.x.xml").toString();
 	
-	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_1_X_FILENAME = Paths.get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.1.x.xml").toString();
+	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_1_X_FILENAME = Paths
+	        .get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.1.x.xml").toString();
 	
-	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_2_X_FILENAME = Paths.get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.2.x.xml").toString();
+	private static final String UPDATES_LIQUIBASE_UPDATE_TO_LATEST_2_2_X_FILENAME = Paths
+	        .get("org/openmrs/liquibase/updates/liquibase-update-to-latest-2.2.x.xml").toString();
 	
 	private static final String NON_EXISTING_VERSION_42_7_X = "42.7.x";
 	
@@ -123,7 +127,8 @@ public class ChangeLogVersionFinderTest {
 	@Test
 	public void shouldGetLiquibaseSnapshotFilenames() {
 		List<String> actual = changeLogVersionFinder.getSnapshotFilenames("1.2.3-one-two-three");
-		List<String> expected = Arrays.asList(Paths.get("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-1.2.x.xml").toString(),
+		List<String> expected = Arrays.asList(
+		    Paths.get("org/openmrs/liquibase/snapshots/schema-only/liquibase-schema-only-1.2.x.xml").toString(),
 		    Paths.get("org/openmrs/liquibase/snapshots/core-data/liquibase-core-data-1.2.x.xml").toString());
 		
 		assertEquals(expected, actual);

@@ -8,12 +8,11 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 package org.openmrs.liquibase;
-import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,18 +30,18 @@ public class ChangeLogVersionsTest {
 	
 	private static final String CORE_DATA_BASE_NAME = ChangeLogVersionFinder.CORE_DATA_BASE_NAME;
 	
-	private static final String CORE_DATA_PATTERN = Paths.get("classpath*:" + 
-	ChangeLogVersionFinder.CORE_DATA_FOLDER_NAME, "*").toString();
+	private static final String CORE_DATA_PATTERN = Paths
+	        .get("classpath*:" + ChangeLogVersionFinder.CORE_DATA_FOLDER_NAME, "*").toString();
 	
 	private static final String SCHEMA_ONLY_BASE_NAME = ChangeLogVersionFinder.SCHEMA_ONLY_BASE_NAME;
 	
-	private static final String SCHEMA_ONLY_PATTERN = Paths.get("classpath*:" + 
-	ChangeLogVersionFinder.SCHEMA_ONLY_FOLDER_NAME, "*").toString();
+	private static final String SCHEMA_ONLY_PATTERN = Paths
+	        .get("classpath*:" + ChangeLogVersionFinder.SCHEMA_ONLY_FOLDER_NAME, "*").toString();
 	
 	private static final String UPDATE_TO_LATEST_BASE_NAME = ChangeLogVersionFinder.UPDATE_TO_LATEST_BASE_NAME;
 	
-	private static final String UPDATE_TO_LATEST_PATTERN = Paths.get("classpath*:" + 
-	ChangeLogVersionFinder.UPDATES_FOLDER_NAME, "*").toString();
+	private static final String UPDATE_TO_LATEST_PATTERN = Paths
+	        .get("classpath*:" + ChangeLogVersionFinder.UPDATES_FOLDER_NAME, "*").toString();
 	
 	private ChangeLogVersions changeLogVersions;
 	
@@ -53,8 +52,8 @@ public class ChangeLogVersionsTest {
 	
 	/**
 	 * This test compares the static list of Liquibase snapshot versions defined by
-	 * org.openmrs.liquibase.ChangeLogVersions#getSnapshotVersions() with the list of actual change log
-	 * files in the two folders
+	 * org.openmrs.liquibase.ChangeLogVersions#getSnapshotVersions() with the list of actual change
+	 * log files in the two folders
 	 * <li>openmrs-core/api/src/main/resources/liquibase/snapshots/core-data
 	 * <li>openmrs-core/api/src/main/resources/liquibase/snapshots/schema-only If this test fails,
 	 * org.openmrs.liquibase.ChangeLogVersions#SNAPSHOT_VERSIONS needs to be updated.
@@ -70,9 +69,9 @@ public class ChangeLogVersionsTest {
 	
 	/**
 	 * This test compares the static list of Liquibase update versions defined by
-	 * org.openmrs.liquibase.ChangeLogVersions#getUpdateVersions() with the list of actual change log
-	 * files in the folder openmrs-core/api/src/main/resources/liquibase/updates. If this test fails,
-	 * org.openmrs.liquibase.ChangeLogVersions#UPDATE_VERSIONS needs to be updated.
+	 * org.openmrs.liquibase.ChangeLogVersions#getUpdateVersions() with the list of actual change
+	 * log files in the folder openmrs-core/api/src/main/resources/liquibase/updates. If this test
+	 * fails, org.openmrs.liquibase.ChangeLogVersions#UPDATE_VERSIONS needs to be updated.
 	 *
 	 * @throws IOException
 	 */

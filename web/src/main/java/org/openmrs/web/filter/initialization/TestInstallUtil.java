@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.Enumeration;
@@ -40,13 +41,13 @@ import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.filter.util.FilterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.nio.file.Paths;
+
 /**
  * Contains static methods to be used by the installation wizard when creating a testing
  * installation
  */
 public class TestInstallUtil {
-
+	
 	private TestInstallUtil() {
 	}
 	
@@ -62,12 +63,13 @@ public class TestInstallUtil {
 	 * @param pwd
 	 * @return true if data was added successfully
 	 */
-	protected static boolean addTestData(String host, int port, String databaseName, String user, String pwd, String filePath) {
+	protected static boolean addTestData(String host, int port, String databaseName, String user, String pwd,
+	        String filePath) {
 		Process proc;
 		BufferedReader br = null;
 		String errorMsg = null;
-		String[] command = new String[] { "mysql", "--host=" + host, "--port=" + port, "--user=" + user,
-		        "--password=" + pwd, "--database=" + databaseName, "-e", "source " + filePath };
+		String[] command = new String[] { "mysql", "--host=" + host, "--port=" + port, "--user=" + user, "--password=" + pwd,
+		        "--database=" + databaseName, "-e", "source " + filePath };
 		
 		//For stand-alone, use explicit path to the mysql executable.
 		String runDirectory = System.getProperties().getProperty("user.dir");
@@ -113,8 +115,8 @@ public class TestInstallUtil {
 				return true;
 			}
 			
-			log
-			        .error("The process terminated abnormally while adding test data. Please look under the Configuration section at: https://wiki.openmrs.org/display/docs/Release+Testing+Helper+Module");
+			log.error(
+			    "The process terminated abnormally while adding test data. Please look under the Configuration section at: https://wiki.openmrs.org/display/docs/Release+Testing+Helper+Module");
 			
 		}
 		catch (IOException e) {
@@ -174,8 +176,8 @@ public class TestInstallUtil {
 					//At this point 'OpenmrsConstants.APPLICATION_DATA_DIRECTORY' is still null so we need check
 					//for the app data directory defined in the runtime props file if any otherwise the logic in
 					//the OpenmrsUtil.getDirectoryInApplicationDataDirectory(String) will default to the other
-					String appDataDirectory = Context.getRuntimeProperties().getProperty(
-					    OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY);
+					String appDataDirectory = Context.getRuntimeProperties()
+					        .getProperty(OpenmrsConstants.APPLICATION_DATA_DIRECTORY_RUNTIME_PROPERTY);
 					if (StringUtils.isNotBlank(appDataDirectory)) {
 						OpenmrsUtil.setApplicationDataDirectory(appDataDirectory);
 					}
@@ -185,8 +187,8 @@ public class TestInstallUtil {
 					//delete all previously added modules in case of prior test installations
 					FileUtils.cleanDirectory(moduleRepository);
 					
-					OpenmrsUtil.copyFile(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(
-					        new File(moduleRepository, fileName))));
+					OpenmrsUtil.copyFile(zipFile.getInputStream(entry),
+					    new BufferedOutputStream(new FileOutputStream(new File(moduleRepository, fileName))));
 				} else {
 					log.debug("Ignoring file that is not a .omod '{}'", fileName);
 				}
@@ -268,9 +270,8 @@ public class TestInstallUtil {
 		
 		return connection.getInputStream();
 	}
-
-	private static HttpURLConnection createConnection(String url)
-	        throws IOException, MalformedURLException {
+	
+	private static HttpURLConnection createConnection(String url) throws IOException, MalformedURLException {
 		final HttpURLConnection result = (HttpURLConnection) new URL(url).openConnection();
 		result.setRequestMethod("POST");
 		result.setConnectTimeout(15000);
@@ -278,7 +279,7 @@ public class TestInstallUtil {
 		result.setDoOutput(true);
 		return result;
 	}
-
+	
 	private static String encodeCredentials(String openmrsUsername, String openmrsPassword) {
 		final StringBuilder result = new StringBuilder();
 		result.append("username=");

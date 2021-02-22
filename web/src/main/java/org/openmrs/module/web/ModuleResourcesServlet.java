@@ -12,8 +12,8 @@ package org.openmrs.module.web;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +25,6 @@ import org.openmrs.module.ModuleUtil;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class ModuleResourcesServlet extends HttpServlet {
 	
@@ -93,20 +92,19 @@ public class ModuleResourcesServlet extends HttpServlet {
 		}
 		
 		String relativePath = ModuleUtil.getPathForResource(module, path);
-		Path p = Paths.get(getServletContext().getRealPath(""), MODULE_PATH, module.getModuleIdAsPath(),   
-				 "resouces", relativePath);
-
+		Path p = Paths.get(getServletContext().getRealPath(""), MODULE_PATH, module.getModuleIdAsPath(), "resouces",
+		    relativePath);
 		
 		//if in dev mode, load resources from the development directory
 		File devDir = ModuleUtil.getDevelopmentDirectory(module.getModuleId());
 		if (devDir != null) {
-			 p = Paths.get(devDir.getAbsolutePath(), "omod", "target", "classes", "web", "module", "resources", relativePath);
+			p = Paths.get(devDir.getAbsolutePath(), "omod", "target", "classes", "web", "module", "resources", relativePath);
 		}
 		
 		File f = new File(p.toString());
-
+		
 		if (!f.exists()) {
-			log.warn("No file with path '" +  f.getPath() + "' exists for module '" + module.getModuleId() + "'");
+			log.warn("No file with path '" + f.getPath() + "' exists for module '" + module.getModuleId() + "'");
 			return null;
 		}
 		

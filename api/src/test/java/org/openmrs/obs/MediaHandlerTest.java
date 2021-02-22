@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,6 @@ import org.openmrs.obs.handler.MediaHandler;
 import org.openmrs.test.jupiter.BaseContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MediaHandlerTest extends BaseContextSensitiveTest {
 	
@@ -51,45 +50,41 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 	}
 	
 	@Test
-    public void shouldReturnSupportedViews() {
+	public void shouldReturnSupportedViews() {
 		String[] actualViews = handler.getSupportedViews();
 		
-		assertArrayEquals(actualViews, new String[]{ ComplexObsHandler.RAW_VIEW });
-    }
-
-    @Test
-    public void shouldSupportRawView() {
+		assertArrayEquals(actualViews, new String[] { ComplexObsHandler.RAW_VIEW });
+	}
+	
+	@Test
+	public void shouldSupportRawView() {
 		
 		assertTrue(handler.supportsView(ComplexObsHandler.RAW_VIEW));
-    }
-
-    @Test
-    public void shouldNotSupportOtherViews() {
-        assertFalse(handler.supportsView(ComplexObsHandler.HTML_VIEW));
-        assertFalse(handler.supportsView(ComplexObsHandler.PREVIEW_VIEW));
-        assertFalse(handler.supportsView(ComplexObsHandler.TEXT_VIEW));
-        assertFalse(handler.supportsView(ComplexObsHandler.TITLE_VIEW));
-        assertFalse(handler.supportsView(ComplexObsHandler.URI_VIEW));
-        assertFalse(handler.supportsView(""));
-        assertFalse(handler.supportsView(null));
-    }
-     
+	}
+	
+	@Test
+	public void shouldNotSupportOtherViews() {
+		assertFalse(handler.supportsView(ComplexObsHandler.HTML_VIEW));
+		assertFalse(handler.supportsView(ComplexObsHandler.PREVIEW_VIEW));
+		assertFalse(handler.supportsView(ComplexObsHandler.TEXT_VIEW));
+		assertFalse(handler.supportsView(ComplexObsHandler.TITLE_VIEW));
+		assertFalse(handler.supportsView(ComplexObsHandler.URI_VIEW));
+		assertFalse(handler.supportsView(""));
+		assertFalse(handler.supportsView(null));
+	}
+	
 	@Test
 	@DisabledOnOs(WINDOWS)
 	public void saveObs_shouldRetrieveCorrectMimetype() throws IOException {
 		
-		adminService.saveGlobalProperty(new GlobalProperty(
-			OpenmrsConstants.GLOBAL_PROPERTY_COMPLEX_OBS_DIR,
-			complexObsTestFolder.toAbsolutePath().toString()
-		));
+		adminService.saveGlobalProperty(new GlobalProperty(OpenmrsConstants.GLOBAL_PROPERTY_COMPLEX_OBS_DIR,
+		        complexObsTestFolder.toAbsolutePath().toString()));
 		
 		File sourceFile = Paths.get("src", "test", "resources", "ComplexObsTestAudio.mp3").toFile();
-
+		
 		Obs complexObs1 = null;
 		Obs complexObs2 = null;
-		try (FileInputStream in1 = new FileInputStream(sourceFile);
-			 FileInputStream in2 = new FileInputStream(sourceFile)
-		) {
+		try (FileInputStream in1 = new FileInputStream(sourceFile); FileInputStream in2 = new FileInputStream(sourceFile)) {
 			ComplexData complexData1 = new ComplexData("TestingComplexObsSaving.mp3", in1);
 			ComplexData complexData2 = new ComplexData("TestingComplexObsSaving.mp3", in2);
 			
@@ -105,9 +100,10 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 			complexObs1 = handler.getObs(obs1, "RAW_VIEW");
 			complexObs2 = handler.getObs(obs2, "RAW_VIEW");
 			
-			assertEquals( "audio/mpeg", complexObs1.getComplexData().getMimeType());
+			assertEquals("audio/mpeg", complexObs1.getComplexData().getMimeType());
 			assertEquals("audio/mpeg", complexObs2.getComplexData().getMimeType());
-		} finally {
+		}
+		finally {
 			((InputStream) complexObs1.getComplexData().getData()).close();
 			((InputStream) complexObs1.getComplexData().getData()).close();
 		}
