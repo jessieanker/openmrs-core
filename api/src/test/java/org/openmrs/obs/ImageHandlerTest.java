@@ -31,6 +31,8 @@ import org.openmrs.obs.handler.ImageHandler;
 import org.openmrs.test.jupiter.BaseContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ImageHandlerTest extends BaseContextSensitiveTest {
 	
@@ -77,8 +79,8 @@ public class ImageHandlerTest extends BaseContextSensitiveTest {
 	public void saveObs_shouldRetrieveCorrectMimetype() throws IOException {
 		String mimetype = "image/png";
 		String filename = "TestingComplexObsSaving.png";
-		File sourceFile = new File(
-	        "src" + File.separator + "test" + File.separator + "resources" + File.separator + "ComplexObsTestImage.png");
+		File sourceFile = 
+	        Paths.get("src", "test", "resources", "ComplexObsTestImage.png").toFile();
 		
 		BufferedImage img = ImageIO.read(sourceFile);
 		
@@ -110,8 +112,7 @@ public class ImageHandlerTest extends BaseContextSensitiveTest {
 	
 	@Test
 	public void saveObs_shouldHandleByteArrays() throws IOException {
-		File sourceFile = new File(
-		       "src" + File.separator + "test" + File.separator + "resources" + File.separator + "ComplexObsTestImage.png");
+		File sourceFile = Paths.get("src", "test", "resources", "ComplexObsTestImage.png").toFile();
 			
 		byte[] bytes = FileUtils.readFileToByteArray(sourceFile);
 		ComplexData complexData = new ComplexData("TestingComplexObsSaving.png", bytes);

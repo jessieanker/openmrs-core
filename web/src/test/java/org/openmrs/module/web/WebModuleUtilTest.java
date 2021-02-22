@@ -35,7 +35,7 @@ import org.openmrs.web.DispatcherServlet;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
+import java.nio.file.Paths;
 /**
  *
  */
@@ -213,7 +213,9 @@ public class WebModuleUtilTest {
 	public void getModuleWebFolder_shouldReturnTheCorrectModuleFolder() {
 		setupMocks(false);
 		String moduleId = "basicmodule";
-		String expectedPath = (REAL_PATH + "/WEB-INF/view/module/" + moduleId).replace("/", File.separator);
+		String expectedPath = Paths.get(REAL_PATH, "WEB-INF", 
+				"view", "module", moduleId).toString();
+		
 		String actualPath = WebModuleUtil.getModuleWebFolder(moduleId);
 		
 		assertEquals(expectedPath, actualPath);
@@ -226,7 +228,7 @@ public class WebModuleUtilTest {
 	public void getModuleWebFolder_shouldReturnTheCorrectModuleFolderIfRealPathHasATrailingSlash() {
 		setupMocks(true);
 		String moduleId = "basicmodule";
-		String expectedPath = (REAL_PATH + "/WEB-INF/view/module/" + moduleId).replace("/", File.separator);
+		String expectedPath = Paths.get(REAL_PATH, "WEB-INF", "view", "module", moduleId).toString();
 		String actualPath = WebModuleUtil.getModuleWebFolder(moduleId);
 		
 		assertEquals(expectedPath, actualPath);

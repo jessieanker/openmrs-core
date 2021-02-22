@@ -8,6 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 package org.openmrs.liquibase;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,18 +31,18 @@ public class ChangeLogVersionsTest {
 	
 	private static final String CORE_DATA_BASE_NAME = ChangeLogVersionFinder.CORE_DATA_BASE_NAME;
 	
-	private static final String CORE_DATA_PATTERN = "classpath*:" + ChangeLogVersionFinder.CORE_DATA_FOLDER_NAME
-	        + File.separator + "*";
+	private static final String CORE_DATA_PATTERN = Paths.get("classpath*:" + 
+	ChangeLogVersionFinder.CORE_DATA_FOLDER_NAME, "*").toString();
 	
 	private static final String SCHEMA_ONLY_BASE_NAME = ChangeLogVersionFinder.SCHEMA_ONLY_BASE_NAME;
 	
-	private static final String SCHEMA_ONLY_PATTERN = "classpath*:" + ChangeLogVersionFinder.SCHEMA_ONLY_FOLDER_NAME
-	        + File.separator + "*";
+	private static final String SCHEMA_ONLY_PATTERN = Paths.get("classpath*:" + 
+	ChangeLogVersionFinder.SCHEMA_ONLY_FOLDER_NAME, "*").toString();
 	
 	private static final String UPDATE_TO_LATEST_BASE_NAME = ChangeLogVersionFinder.UPDATE_TO_LATEST_BASE_NAME;
 	
-	private static final String UPDATE_TO_LATEST_PATTERN = "classpath*:" + ChangeLogVersionFinder.UPDATES_FOLDER_NAME
-	        + File.separator + "*";
+	private static final String UPDATE_TO_LATEST_PATTERN = Paths.get("classpath*:" + 
+	ChangeLogVersionFinder.UPDATES_FOLDER_NAME, "*").toString();
 	
 	private ChangeLogVersions changeLogVersions;
 	

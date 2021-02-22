@@ -64,6 +64,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
+import java.nio.file.Paths;
 
 /**
  * Our Listener class performs the basic starting functions for our webapp. Basic needs for starting
@@ -292,8 +293,8 @@ public final class Listener extends ContextLoader implements ServletContextListe
 		if (StringUtils.hasLength(appDataDir)) {
 			OpenmrsUtil.setApplicationDataDirectory(appDataDir);
 		} else if (!"openmrs".equalsIgnoreCase(WebConstants.WEBAPP_NAME)) {
-			OpenmrsUtil.setApplicationDataDirectory(
-			    OpenmrsUtil.getApplicationDataDirectory() + File.separator + WebConstants.WEBAPP_NAME);
+			OpenmrsUtil.setApplicationDataDirectory(Paths.get(
+			OpenmrsUtil.getApplicationDataDirectory(), WebConstants.WEBAPP_NAME).toString());
 		}
 	}
 	
@@ -319,9 +320,8 @@ public final class Listener extends ContextLoader implements ServletContextListe
 	 * @param servletContext
 	 */
 	private void clearDWRFile(ServletContext servletContext) {
-		String realPath = servletContext.getRealPath("");
-		String absPath = realPath + "/WEB-INF/dwr-modules.xml";
-		File dwrFile = new File(absPath.replace("/", File.separator));
+		File dwrFile = Paths.get(servletContext.getRealPath(""), "WEB-INF", "dwr-modules.xml").toFile(); 
+				
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -475,9 +475,8 @@ public final class Listener extends ContextLoader implements ServletContextListe
 	 * @param servletContext the current servlet context for the webapp
 	 */
 	public static void loadBundledModules(ServletContext servletContext) {
-		String path = servletContext.getRealPath("");
-		path += File.separator + "WEB-INF" + File.separator + "bundledModules";
-		File folder = new File(path);
+		File folder = Paths.get(servletContext.getRealPath(""), 
+				"WEB-INF", "bundledModules").toFile();
 		
 		if (!folder.exists()) {
 			log.warn("Bundled module folder doesn't exist: " + folder.getAbsolutePath());

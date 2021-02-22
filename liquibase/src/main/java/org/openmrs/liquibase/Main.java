@@ -12,20 +12,22 @@ package org.openmrs.liquibase;
 import java.io.File;
 import java.io.IOException;
 import org.dom4j.DocumentException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main {
 	
-	public static final String LIQUIBASE_CORE_DATA_SOURCE_PATH = "." + File.separator + "snapshots" + File.separator
-	        + "liquibase-core-data-SNAPSHOT.xml";
+	public static final String LIQUIBASE_CORE_DATA_SOURCE_PATH = Paths.get(".",
+			"snapshots", "liquibase-core-data-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_CORE_DATA_TARGET_PATH = "." + File.separator + "snapshots" + File.separator
-	        + "liquibase-core-data-UPDATED-SNAPSHOT.xml";
+	public static final String LIQUIBASE_CORE_DATA_TARGET_PATH = Paths.get(".",
+			"snapshots", "liquibase-core-data-UPDATED-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH = "." + File.separator + "snapshots" + File.separator
-	        + "liquibase-schema-only-SNAPSHOT.xml";
+	public static final String LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH = Paths.get(".", 
+			"snapshots", "liquibase-schema-only-SNAPSHOT.xml").toString();
 	
-	public static final String LIQUIBASE_SCHEMA_ONLY_TARGET_PATH = "." + File.separator + "snapshots" + File.separator
-	        + "liquibase-schema-only-UPDATED-SNAPSHOT.xml";
+	public static final String LIQUIBASE_SCHEMA_ONLY_TARGET_PATH = Paths.get(".", 
+			"snapshots", "liquibase-schema-only-UPDATED-SNAPSHOT.xml").toString();
 	
 	private static CoreDataTuner coreDataTuner;
 	

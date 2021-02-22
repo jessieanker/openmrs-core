@@ -40,7 +40,7 @@ import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.filter.util.FilterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.nio.file.Paths;
 /**
  * Contains static methods to be used by the installation wizard when creating a testing
  * installation
@@ -71,8 +71,7 @@ public class TestInstallUtil {
 		
 		//For stand-alone, use explicit path to the mysql executable.
 		String runDirectory = System.getProperties().getProperty("user.dir");
-		File file = new File(runDirectory + File.separatorChar + "database" + File.separatorChar + "bin"
-		        + File.separatorChar + "mysql");
+		File file = Paths.get(runDirectory, "database", "bin", "mysql").toFile();
 		
 		if (file.exists()) {
 			command[0] = file.getAbsolutePath();

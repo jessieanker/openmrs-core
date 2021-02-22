@@ -32,6 +32,8 @@ import org.openmrs.obs.handler.MediaHandler;
 import org.openmrs.test.jupiter.BaseContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MediaHandlerTest extends BaseContextSensitiveTest {
 	
@@ -81,8 +83,7 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 			complexObsTestFolder.toAbsolutePath().toString()
 		));
 		
-		File sourceFile = new File(
-			"src" + File.separator + "test" + File.separator + "resources" + File.separator + "ComplexObsTestAudio.mp3");
+		File sourceFile = Paths.get("src", "test", "resources", "ComplexObsTestAudio.mp3").toFile();
 
 		Obs complexObs1 = null;
 		Obs complexObs2 = null;

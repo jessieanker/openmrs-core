@@ -46,6 +46,8 @@ import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Standard implementation of module class loader. <br>
@@ -115,7 +117,7 @@ public class ModuleClassLoader extends URLClassLoader {
 				if (!file.isDirectory()) {
 					continue;
 				}
-				File dir = new File(devDir, file.getName() + File.separator + "target" + File.separator + "classes" + File.separator);
+				File dir = Paths.get(devDir.getAbsolutePath(), file.getName(), "target", "classes").toFile();
 				if (dir.exists()) {
 					Collection<File> files = FileUtils.listFiles(dir, new String[] { "class" }, true);
 					addClassFilePackages(files, dir.getAbsolutePath().length() + 1);
@@ -133,9 +135,8 @@ public class ModuleClassLoader extends URLClassLoader {
 			String name = file.getAbsolutePath().substring(dirLength);
 			Integer indexOfLastSlash = name.lastIndexOf(File.separator);
 			if (indexOfLastSlash > 0) {
-				String packageName = name.substring(0, indexOfLastSlash);
-				packageName = packageName.replace(File.separator, ".");
-				providedPackages.add(packageName);
+				Path packageName = Paths.get(name.substring(0,indexOfLastSlash));
+				providedPackages.add(packageName.toString());
 			}
 		}
 	}
@@ -211,7 +212,7 @@ public class ModuleClassLoader extends URLClassLoader {
 						if (!file.isDirectory()) {
 							continue;
 						}
-						File dir = new File(devDir, file.getName() + File.separator + "target" + File.separator + "classes" + File.separator);
+						File dir = Paths.get(devDir.getAbsolutePath(), file.getName(),"target","classes").toFile();
 						if (dir.exists()) {
 							result.add(dir.toURI().toURL());
 							devFolderNames.add(file.getName());

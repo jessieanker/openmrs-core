@@ -34,6 +34,8 @@ import org.springframework.context.support.AbstractRefreshableApplicationContext
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * ModuleActivator tests that need refreshing the spring application context. The only reason why i
@@ -52,7 +54,7 @@ public class WebModuleActivatorTest extends BaseModuleActivatorTest {
 		//org.openmrs.module.ModuleException: Unable to load module messages from file: 
 		// /Projects/openmrs/core/web/target/test-classes/WEB-INF/module_messages_fr.properties
 		
-		File folder = new File("target" + File.separatorChar + "test-classes" + File.separatorChar + "WEB-INF");
+		File folder = Paths.get("target", "test-classes", "WEB-INF").toFile();
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
