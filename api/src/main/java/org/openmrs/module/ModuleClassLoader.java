@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -134,8 +133,10 @@ public class ModuleClassLoader extends URLClassLoader {
 			String name = file.getAbsolutePath().substring(dirLength);
 			Integer indexOfLastSlash = name.lastIndexOf(File.separator);
 			if (indexOfLastSlash > 0) {
-				Path packageName = Paths.get(name.substring(0, indexOfLastSlash));
-				providedPackages.add(packageName.toString());
+				String packageName = name.substring(0, indexOfLastSlash);
+				packageName = packageName.replace(File.separator, ".");
+				providedPackages.add(packageName);
+				
 			}
 		}
 	}

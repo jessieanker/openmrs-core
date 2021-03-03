@@ -102,8 +102,7 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 			
 			assertEquals("audio/mpeg", complexObs1.getComplexData().getMimeType());
 			assertEquals("audio/mpeg", complexObs2.getComplexData().getMimeType());
-		}
-		finally {
+		} finally {
 			((InputStream) complexObs1.getComplexData().getData()).close();
 			((InputStream) complexObs1.getComplexData().getData()).close();
 		}

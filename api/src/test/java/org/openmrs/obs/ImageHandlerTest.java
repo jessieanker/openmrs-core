@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -108,9 +108,9 @@ public class ImageHandlerTest extends BaseContextSensitiveTest {
 	
 	@Test
 	public void saveObs_shouldHandleByteArrays() throws IOException {
-		File sourceFile = Paths.get("src", "test", "resources", "ComplexObsTestImage.png").toFile();
+		Path sourceFile = Paths.get("src", "test", "resources", "ComplexObsTestImage.png");
 		
-		byte[] bytes = FileUtils.readFileToByteArray(sourceFile);
+		byte[] bytes = Files.readAllBytes(sourceFile);
 		ComplexData complexData = new ComplexData("TestingComplexObsSaving.png", bytes);
 		
 		Obs obs = new Obs();

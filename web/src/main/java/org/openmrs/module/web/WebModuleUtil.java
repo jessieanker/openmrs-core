@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -76,7 +75,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class WebModuleUtil {
-	
+
 	private WebModuleUtil() {
 	}
 	
@@ -90,11 +89,13 @@ public class WebModuleUtil {
 	private static Map<String, HttpServlet> moduleServlets = Collections.synchronizedMap(new HashMap<>());
 	
 	// caches all of the module loaded filters and filter-mappings
-	private static Map<Module, Collection<Filter>> moduleFilters = Collections.synchronizedMap(new HashMap<>());
+	private static Map<Module, Collection<Filter>> moduleFilters = Collections
+	        .synchronizedMap(new HashMap<>());
 	
 	private static Map<String, Filter> moduleFiltersByName = Collections.synchronizedMap(new HashMap<>());
 	
-	private static List<ModuleFilterMapping> moduleFilterMappings = Collections.synchronizedList(new Vector<>());
+	private static List<ModuleFilterMapping> moduleFilterMappings = Collections
+	        .synchronizedList(new Vector<>());
 	
 	/**
 	 * Performs the webapp specific startup needs for modules Normal startup is done in
@@ -126,7 +127,7 @@ public class WebModuleUtil {
 				realPath = System.getProperty("user.dir");
 			}
 			
-			File webInf = Paths.get(realPath, "WEB-INF").toFile();
+			File webInf = new File(realPath + "/WEB-INF".replace("/", File.separator));
 			if (!webInf.exists()) {
 				webInf.mkdir();
 			}
@@ -171,7 +172,7 @@ public class WebModuleUtil {
 						log.debug("Moving file from: {} to {}", name, absPath);
 						
 						// get the output file
-						File outFile = Paths.get(absPath.toString()).toFile();
+						File outFile = new File(absPath.toString().replace("/", File.separator));
 						if (entry.isDirectory()) {
 							if (!outFile.exists()) {
 								outFile.mkdirs();
@@ -188,8 +189,7 @@ public class WebModuleUtil {
 							inStream = jarFile.getInputStream(entry);
 							OpenmrsUtil.copyFile(inStream, outStream);
 						}
-					} else if ("moduleApplicationContext.xml".equals(name)
-					        || "webModuleApplicationContext.xml".equals(name)) {
+					} else if ("moduleApplicationContext.xml".equals(name) || "webModuleApplicationContext.xml".equals(name)) {
 						moduleNeedsContextRefresh = true;
 					} else if (name.equals(mod.getModuleId() + "Context.xml")) {
 						String msg = "DEPRECATED: '" + name
@@ -236,7 +236,7 @@ public class WebModuleUtil {
 				if (root.getElementsByTagName("dwr").getLength() > 0) {
 					
 					// get the dwr-module.xml file that we're appending our code to
-					File f = Paths.get(realPath, "WEB-INF", "dwr-modules.xml").toFile();
+					File f = new File(realPath + "/WEB-INF/dwr-modules.xml".replace("/", File.separator));
 					
 					// testing if file exists
 					if (!f.exists()) {
@@ -284,7 +284,8 @@ public class WebModuleUtil {
 			
 			// mark to delete the entire module web directory on exit
 			// this will usually only be used when an improper shutdown has occurred.
-			File outFile = Paths.get(realPath, "WEB-INF", "view", "module", mod.getModuleIdAsPath()).toFile();
+			String folderPath = realPath + "/WEB-INF/view/module/" + mod.getModuleIdAsPath();
+			File outFile = new File(folderPath.replace("/", File.separator));
 			outFile.deleteOnExit();
 			
 			// additional checks on module needing a context refresh
@@ -355,9 +356,7 @@ public class WebModuleUtil {
 		return false;
 	}
 	
-	/**
-	 * Stops all tasks started by given module
-	 * 
+	/** Stops all tasks started by given module
 	 * @param mod
 	 */
 	private static void stopTasks(Module mod) {
@@ -386,13 +385,13 @@ public class WebModuleUtil {
 	
 	/**
 	 * Checks if module package name is in task class name
-	 * 
 	 * @param modulePackageName the package name of module
 	 * @param taskClass the class of given task
-	 * @return true if task and module are in the same package <strong>Should</strong> return false
-	 *         for different package names <strong>Should</strong> return false if module has longer
-	 *         package name <strong>Should</strong> properly match subpackages
-	 *         <strong>Should</strong> return false for empty package names
+	 * @return true if task and module are in the same package
+	 * <strong>Should</strong> return false for different package names
+	 * <strong>Should</strong> return false if module has longer package name
+	 * <strong>Should</strong> properly match subpackages
+	 * <strong>Should</strong> return false for empty package names
 	 */
 	public static boolean isModulePackageNameInTaskClass(String modulePackageName, String taskClass) {
 		return modulePackageName.length() <= taskClass.length()
@@ -535,8 +534,8 @@ public class WebModuleUtil {
 		try {
 			for (ModuleFilterDefinition def : ModuleFilterDefinition.retrieveFilterDefinitions(module)) {
 				if (moduleFiltersByName.containsKey(def.getFilterName())) {
-					throw new ModuleException(
-					        "A filter with name <" + def.getFilterName() + "> has already been registered.");
+					throw new ModuleException("A filter with name <" + def.getFilterName()
+					        + "> has already been registered.");
 				}
 				ModuleFilterConfig config = ModuleFilterConfig.getInstance(def, servletContext);
 				Filter f = (Filter) ModuleFactory.getModuleClassLoader(module).loadClass(def.getFilterClass()).newInstance();
@@ -590,7 +589,7 @@ public class WebModuleUtil {
 			}
 			log.debug("Module: " + module.getModuleId() + " successfully unloaded " + filters.size() + " filters.");
 			moduleFilters.remove(module);
-			
+
 			moduleFiltersByName.values().removeIf(filters::contains);
 		}
 	}
@@ -658,7 +657,7 @@ public class WebModuleUtil {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			
+
 			// When asked to resolve external entities (such as a DTD) we return an InputSource
 			// with no data at the end, causing the parser to ignore the DTD.
 			db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
@@ -676,7 +675,12 @@ public class WebModuleUtil {
 	 * is done by ModuleFactory
 	 */
 	public static void shutdownModules(ServletContext servletContext) {
-		File folder = Paths.get(getRealPath(servletContext), "WEB-INF").toFile();
+		
+		String realPath = getRealPath(servletContext);
+		
+		// clear the module messages
+		String messagesPath = realPath + "/WEB-INF/";
+		File folder = new File(messagesPath.replace("/", File.separator));
 		
 		File[] files = folder.listFiles();
 		if (folder.exists() && files != null) {
@@ -727,7 +731,8 @@ public class WebModuleUtil {
 		String realPath = getRealPath(servletContext);
 		
 		// delete the web files from the webapp
-		File moduleWebFolder = Paths.get(realPath, "WEB-INF", "view", "module", moduleId).toFile();
+		String absPath = realPath + "/WEB-INF/view/module/" + moduleId;
+		File moduleWebFolder = new File(absPath.replace("/", File.separator));
 		if (moduleWebFolder.exists()) {
 			try {
 				OpenmrsUtil.deleteDirectory(moduleWebFolder);
@@ -757,7 +762,7 @@ public class WebModuleUtil {
 			if (root.getElementsByTagName("dwr").getLength() > 0) {
 				
 				// get the dwr-module.xml file that we're appending our code to
-				File f = Paths.get(realPath, "WEB-INF", "dwr-modules.xml").toFile();
+				File f = new File(realPath + "/WEB-INF/dwr-modules.xml".replace("/", File.separator));
 				
 				// testing if file exists
 				if (!f.exists()) {
@@ -807,7 +812,7 @@ public class WebModuleUtil {
 			}
 		}
 		
-		if (!skipRefresh) {
+		if (!skipRefresh) {	
 			refreshWAC(servletContext, false, null);
 		}
 		
@@ -892,9 +897,9 @@ public class WebModuleUtil {
 	 *
 	 * @param moduleId module id (e.g., "basicmodule")
 	 * @return a path to a folder that stores web files or null if not in a web environment
-	 *         <strong>Should</strong> return the correct module folder <strong>Should</strong>
-	 *         return null if the dispatcher servlet is not yet set <strong>Should</strong> return
-	 *         the correct module folder if real path has a trailing slash
+	 * <strong>Should</strong> return the correct module folder
+	 * <strong>Should</strong> return null if the dispatcher servlet is not yet set
+	 * <strong>Should</strong> return the correct module folder if real path has a trailing slash
 	 */
 	public static String getModuleWebFolder(String moduleId) {
 		if (dispatcherServlet == null) {
@@ -914,7 +919,7 @@ public class WebModuleUtil {
 		
 		moduleWebFolder += moduleId;
 		
-		return Paths.get(moduleWebFolder).toString();
+		return moduleWebFolder.replace("/", File.separator);
 	}
 	
 	public static void createDwrModulesXml(String realPath) {
@@ -933,7 +938,8 @@ public class WebModuleUtil {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(Paths.get(realPath, "WEB-INF", "dwr-modules.xml").toFile());
+			StreamResult result = new StreamResult(new File(realPath
+			        + "/WEB-INF/dwr-modules.xml".replace("/", File.separator)));
 			
 			transformer.transform(source, result);
 			

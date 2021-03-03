@@ -575,7 +575,8 @@ public class OpenmrsUtil {
 		
 		String logLocation = OpenmrsUtil.getOpenmrsLogLocation();
 		String logPattern = logLocation.replace(".log", ".%i.log");
-		fileAppender = RollingFileAppender.newBuilder().setLayout(patternLayout).withFileName(logLocation)
+		fileAppender = RollingFileAppender.newBuilder()
+				.setLayout(patternLayout).withFileName(logLocation)
 		        .withFilePattern(logPattern).setName(OpenmrsConstants.LOG_OPENMRS_FILE_APPENDER)
 		        .withPolicy(CompositeTriggeringPolicy.createPolicy(OnStartupTriggeringPolicy.createPolicy(1),
 		            SizeBasedTriggeringPolicy.createPolicy("10MB")))
@@ -1094,7 +1095,7 @@ public class OpenmrsUtil {
 		
 		if (filepath == null) {
 			if (OpenmrsConstants.UNIX_BASED_OPERATING_SYSTEM) {
-				filepath = Paths.get(System.getProperty("user.home"), ".", openmrsDir).toString();
+				filepath = Paths.get(System.getProperty("user.home"), "." + openmrsDir).toString();
 				if (!canWrite(new File(filepath))) {
 					log.warn("Unable to write to users home dir, fallback to: "
 					        + OpenmrsConstants.APPLICATION_DATA_DIRECTORY_FALLBACK_UNIX);
@@ -1109,9 +1110,10 @@ public class OpenmrsUtil {
 				}
 			}
 			
+			filepath = filepath + File.separator;
 		}
 		
-		File folder = Paths.get(filepath).toFile();
+		File folder = new File(filepath);
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
@@ -1841,28 +1843,30 @@ public class OpenmrsUtil {
 	 * @param password string that will be validated
 	 * @param systemId system id of the user with password to be validated
 	 * @throws PasswordException
-	 * @since 1.5 <strong>Should</strong> fail with short password by default
-	 *        <strong>Should</strong> fail with short password if not allowed
-	 *        <strong>Should</strong> pass with short password if allowed <strong>Should</strong>
-	 *        fail with digit only password by default <strong>Should</strong> fail with digit only
-	 *        password if not allowed <strong>Should</strong> pass with digit only password if
-	 *        allowed <strong>Should</strong> fail with char only password by default
-	 *        <strong>Should</strong> fail with char only password if not allowed
-	 *        <strong>Should</strong> pass with char only password if allowed
-	 *        <strong>Should</strong> fail without both upper and lower case password by default
-	 *        <strong>Should</strong> fail without both upper and lower case password if not allowed
-	 *        <strong>Should</strong> pass without both upper and lower case password if allowed
-	 *        <strong>Should</strong> fail with password equals to user name by default
-	 *        <strong>Should</strong> fail with password equals to user name if not allowed
-	 *        <strong>Should</strong> pass with password equals to user name if allowed
-	 *        <strong>Should</strong> fail with password equals to system id by default
-	 *        <strong>Should</strong> fail with password equals to system id if not allowed
-	 *        <strong>Should</strong> pass with password equals to system id if allowed
-	 *        <strong>Should</strong> fail with password not matching configured regex
-	 *        <strong>Should</strong> pass with password matching configured regex
-	 *        <strong>Should</strong> allow password to contain non alphanumeric characters
-	 *        <strong>Should</strong> allow password to contain white spaces <strong>Should</strong>
-	 *        still work without an open session
+	 * @since 1.5
+	 * <strong>Should</strong> fail with short password by default
+	 * <strong>Should</strong> fail with short password if not allowed
+	 * <strong>Should</strong> pass with short password if allowed
+	 * <strong>Should</strong> fail with digit only password by default
+	 * <strong>Should</strong> fail with digit only password if not allowed
+	 * <strong>Should</strong> pass with digit only password if allowed
+	 * <strong>Should</strong> fail with char only password by default
+	 * <strong>Should</strong> fail with char only password if not allowed
+	 * <strong>Should</strong> pass with char only password if allowed
+	 * <strong>Should</strong> fail without both upper and lower case password by default
+	 * <strong>Should</strong> fail without both upper and lower case password if not allowed
+	 * <strong>Should</strong> pass without both upper and lower case password if allowed
+	 * <strong>Should</strong> fail with password equals to user name by default
+	 * <strong>Should</strong> fail with password equals to user name if not allowed
+	 * <strong>Should</strong> pass with password equals to user name if allowed
+	 * <strong>Should</strong> fail with password equals to system id by default
+	 * <strong>Should</strong> fail with password equals to system id if not allowed
+	 * <strong>Should</strong> pass with password equals to system id if allowed
+	 * <strong>Should</strong> fail with password not matching configured regex
+	 * <strong>Should</strong> pass with password matching configured regex
+	 * <strong>Should</strong> allow password to contain non alphanumeric characters
+	 * <strong>Should</strong> allow password to contain white spaces
+	 * <strong>Should</strong> still work without an open session
 	 */
 	public static void validatePassword(String username, String password, String systemId) throws PasswordException {
 		

@@ -23,7 +23,6 @@ import org.openmrs.BaseOpenmrsObject;
  * Tests methods on the {@link WebUtil} class.
  */
 public class WebUtilTest {
-	
 	/**
 	 * @see org.openmrs.web.WebUtil#getContextPath()
 	 */
