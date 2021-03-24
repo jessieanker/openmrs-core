@@ -108,8 +108,8 @@ public class ChangeLogVersionFinder {
 	}
 	
 	public Optional<String> getLatestSchemaSnapshotFilename() {
-		return getLatestSnapshotVersion().map(snapshotVersion -> Paths
-		        .get(SCHEMA_ONLY_FOLDER_NAME, SCHEMA_ONLY_BASE_NAME + snapshotVersion + DOT_XML).toString());
+		return getLatestSnapshotVersion().map(
+			snapshotVersion -> Paths.get(SCHEMA_ONLY_FOLDER_NAME, SCHEMA_ONLY_BASE_NAME + snapshotVersion + DOT_XML).toString());
 	}
 	
 	public Optional<String> getLatestCoreDataSnapshotFilename() {

@@ -102,7 +102,8 @@ public class SchemaOnlyTunerTest {
 		List<Node> nodes = xpath.selectNodes(document);
 		assertEquals(94, nodes.size());
 		
-		schemaOnlyTuner.replaceBitWithBoolean(document);
+		// when
+		Document actual = schemaOnlyTuner.replaceBitWithBoolean(document);
 		
 		// then
 		for (Node node : nodes) {
@@ -121,7 +122,7 @@ public class SchemaOnlyTunerTest {
 		
 		// when
 		SchemaOnlyTuner schemaOnlyTunerSpy = Mockito.spy(schemaOnlyTuner);
-		schemaOnlyTunerSpy.replaceLongtextWithClob(document);
+		Document actual = schemaOnlyTunerSpy.replaceLongtextWithClob(document);
 		
 		// then
 		for (Node node : nodes) {

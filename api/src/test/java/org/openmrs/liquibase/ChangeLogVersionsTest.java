@@ -52,8 +52,8 @@ public class ChangeLogVersionsTest {
 	
 	/**
 	 * This test compares the static list of Liquibase snapshot versions defined by
-	 * org.openmrs.liquibase.ChangeLogVersions#getSnapshotVersions() with the list of actual change
-	 * log files in the two folders
+	 * org.openmrs.liquibase.ChangeLogVersions#getSnapshotVersions() with the list of actual change log
+	 * files in the two folders
 	 * <li>openmrs-core/api/src/main/resources/liquibase/snapshots/core-data
 	 * <li>openmrs-core/api/src/main/resources/liquibase/snapshots/schema-only If this test fails,
 	 * org.openmrs.liquibase.ChangeLogVersions#SNAPSHOT_VERSIONS needs to be updated.
@@ -69,9 +69,9 @@ public class ChangeLogVersionsTest {
 	
 	/**
 	 * This test compares the static list of Liquibase update versions defined by
-	 * org.openmrs.liquibase.ChangeLogVersions#getUpdateVersions() with the list of actual change
-	 * log files in the folder openmrs-core/api/src/main/resources/liquibase/updates. If this test
-	 * fails, org.openmrs.liquibase.ChangeLogVersions#UPDATE_VERSIONS needs to be updated.
+	 * org.openmrs.liquibase.ChangeLogVersions#getUpdateVersions() with the list of actual change log
+	 * files in the folder openmrs-core/api/src/main/resources/liquibase/updates. If this test fails,
+	 * org.openmrs.liquibase.ChangeLogVersions#UPDATE_VERSIONS needs to be updated.
 	 *
 	 * @throws IOException
 	 */

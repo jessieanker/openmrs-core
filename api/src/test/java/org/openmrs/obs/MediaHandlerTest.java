@@ -50,29 +50,29 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 	}
 	
 	@Test
-	public void shouldReturnSupportedViews() {
+    public void shouldReturnSupportedViews() {
 		String[] actualViews = handler.getSupportedViews();
-		
-		assertArrayEquals(actualViews, new String[] { ComplexObsHandler.RAW_VIEW });
-	}
-	
-	@Test
-	public void shouldSupportRawView() {
-		
+
+		assertArrayEquals(actualViews, new String[]{ ComplexObsHandler.RAW_VIEW });
+    }
+
+    @Test
+    public void shouldSupportRawView() {
+
 		assertTrue(handler.supportsView(ComplexObsHandler.RAW_VIEW));
-	}
-	
-	@Test
-	public void shouldNotSupportOtherViews() {
-		assertFalse(handler.supportsView(ComplexObsHandler.HTML_VIEW));
-		assertFalse(handler.supportsView(ComplexObsHandler.PREVIEW_VIEW));
-		assertFalse(handler.supportsView(ComplexObsHandler.TEXT_VIEW));
-		assertFalse(handler.supportsView(ComplexObsHandler.TITLE_VIEW));
-		assertFalse(handler.supportsView(ComplexObsHandler.URI_VIEW));
-		assertFalse(handler.supportsView(""));
-		assertFalse(handler.supportsView(null));
-	}
-	
+    }
+
+    @Test
+    public void shouldNotSupportOtherViews() {
+        assertFalse(handler.supportsView(ComplexObsHandler.HTML_VIEW));
+        assertFalse(handler.supportsView(ComplexObsHandler.PREVIEW_VIEW));
+        assertFalse(handler.supportsView(ComplexObsHandler.TEXT_VIEW));
+        assertFalse(handler.supportsView(ComplexObsHandler.TITLE_VIEW));
+        assertFalse(handler.supportsView(ComplexObsHandler.URI_VIEW));
+        assertFalse(handler.supportsView(""));
+        assertFalse(handler.supportsView(null));
+    }
+    
 	@Test
 	@DisabledOnOs(WINDOWS)
 	public void saveObs_shouldRetrieveCorrectMimetype() throws IOException {
@@ -84,7 +84,9 @@ public class MediaHandlerTest extends BaseContextSensitiveTest {
 		
 		Obs complexObs1 = null;
 		Obs complexObs2 = null;
-		try (FileInputStream in1 = new FileInputStream(sourceFile); FileInputStream in2 = new FileInputStream(sourceFile)) {
+		try (FileInputStream in1 = new FileInputStream(sourceFile);
+				 FileInputStream in2 = new FileInputStream(sourceFile)
+			) {
 			ComplexData complexData1 = new ComplexData("TestingComplexObsSaving.mp3", in1);
 			ComplexData complexData2 = new ComplexData("TestingComplexObsSaving.mp3", in2);
 			

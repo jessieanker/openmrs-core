@@ -40,7 +40,6 @@ public class Main {
 	public static void main(String[] args) throws DocumentException, IOException {
 		coreDataTuner.addLicenseHeaderToFileIfNeeded(LIQUIBASE_CORE_DATA_SOURCE_PATH);
 		coreDataTuner.createUpdatedChangeLogFile(LIQUIBASE_CORE_DATA_SOURCE_PATH, LIQUIBASE_CORE_DATA_TARGET_PATH);
-		
 		schemaOnlyTuner.addLicenseHeaderToFileIfNeeded(LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH);
 		schemaOnlyTuner.createUpdatedChangeLogFile(LIQUIBASE_SCHEMA_ONLY_SOURCE_PATH, LIQUIBASE_SCHEMA_ONLY_TARGET_PATH);
 	}

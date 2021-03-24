@@ -71,6 +71,7 @@ public class ModuleClassLoader extends URLClassLoader {
 	
 	private boolean disposed = false;
 	
+	
 	/**
 	 * @param module Module
 	 * @param urls resources "managed" by this class loader

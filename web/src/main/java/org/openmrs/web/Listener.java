@@ -325,11 +325,9 @@ public final class Listener extends ContextLoader implements ServletContextListe
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			
 			// When asked to resolve external entities (such as a DTD) we return an InputSource
 			// with no data at the end, causing the parser to ignore the DTD.
 			db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
-			
 			Document doc = db.parse(dwrFile);
 			Element elem = doc.getDocumentElement();
 			elem.setTextContent("");
@@ -408,8 +406,7 @@ public final class Listener extends ContextLoader implements ServletContextListe
 									if (!copyFile(userOverridePath, tmpAbsolutePath)) {
 										log.warn("Unable to copy file in folder defined by runtime property: " + prop);
 										log.warn("Your source directory (or a file in it) '" + userOverridePath
-										        + " cannot be loaded or destination '" + tmpAbsolutePath
-										        + "' cannot be found");
+													+ " cannot be loaded or destination '" + tmpAbsolutePath + "' cannot be found");
 									}
 								}
 							}
@@ -541,7 +538,6 @@ public final class Listener extends ContextLoader implements ServletContextListe
 			// remove the user context that we set earlier
 			Context.closeSession();
 		}
-		
 		try {
 			for (Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
 				Driver driver = e.nextElement();

@@ -47,7 +47,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleException;
@@ -75,7 +74,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class WebModuleUtil {
-
+	
 	private WebModuleUtil() {
 	}
 	
@@ -91,9 +90,9 @@ public class WebModuleUtil {
 	// caches all of the module loaded filters and filter-mappings
 	private static Map<Module, Collection<Filter>> moduleFilters = Collections
 	        .synchronizedMap(new HashMap<>());
-	
+
 	private static Map<String, Filter> moduleFiltersByName = Collections.synchronizedMap(new HashMap<>());
-	
+
 	private static List<ModuleFilterMapping> moduleFilterMappings = Collections
 	        .synchronizedList(new Vector<>());
 	
@@ -360,13 +359,8 @@ public class WebModuleUtil {
 	 * @param mod
 	 */
 	private static void stopTasks(Module mod) {
-		SchedulerService schedulerService;
-		try {
-			schedulerService = Context.getSchedulerService();
-		} catch (NullPointerException | APIException e) {
-			// if we got here, the scheduler has already been shut down, so there's no work to do
-			return;
-		}
+		
+		SchedulerService schedulerService = Context.getSchedulerService();
 		
 		String modulePackageName = mod.getPackageName();
 		for (TaskDefinition task : schedulerService.getRegisteredTasks()) {
@@ -535,7 +529,7 @@ public class WebModuleUtil {
 			for (ModuleFilterDefinition def : ModuleFilterDefinition.retrieveFilterDefinitions(module)) {
 				if (moduleFiltersByName.containsKey(def.getFilterName())) {
 					throw new ModuleException("A filter with name <" + def.getFilterName()
-					        + "> has already been registered.");
+			        + "> has already been registered.");
 				}
 				ModuleFilterConfig config = ModuleFilterConfig.getInstance(def, servletContext);
 				Filter f = (Filter) ModuleFactory.getModuleClassLoader(module).loadClass(def.getFilterClass()).newInstance();
@@ -589,7 +583,7 @@ public class WebModuleUtil {
 			}
 			log.debug("Module: " + module.getModuleId() + " successfully unloaded " + filters.size() + " filters.");
 			moduleFilters.remove(module);
-
+			
 			moduleFiltersByName.values().removeIf(filters::contains);
 		}
 	}
@@ -657,9 +651,9 @@ public class WebModuleUtil {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-
 			// When asked to resolve external entities (such as a DTD) we return an InputSource
 			// with no data at the end, causing the parser to ignore the DTD.
+			
 			db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
 			dwrmodulexml = db.parse(inputStream);
 		}
@@ -729,7 +723,7 @@ public class WebModuleUtil {
 		}
 		
 		String realPath = getRealPath(servletContext);
-		
+
 		// delete the web files from the webapp
 		String absPath = realPath + "/WEB-INF/view/module/" + moduleId;
 		File moduleWebFolder = new File(absPath.replace("/", File.separator));
@@ -760,7 +754,7 @@ public class WebModuleUtil {
 			Element root = config.getDocumentElement();
 			// if they defined any xml element
 			if (root.getElementsByTagName("dwr").getLength() > 0) {
-				
+
 				// get the dwr-module.xml file that we're appending our code to
 				File f = new File(realPath + "/WEB-INF/dwr-modules.xml".replace("/", File.separator));
 				
@@ -939,7 +933,7 @@ public class WebModuleUtil {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File(realPath
-			        + "/WEB-INF/dwr-modules.xml".replace("/", File.separator)));
+		        + "/WEB-INF/dwr-modules.xml".replace("/", File.separator)));
 			
 			transformer.transform(source, result);
 			
