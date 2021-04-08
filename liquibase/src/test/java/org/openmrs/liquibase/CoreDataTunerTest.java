@@ -148,7 +148,7 @@ public class CoreDataTunerTest {
 			List<String> first = Arrays.asList("one", "six");
 			List<String> second = Arrays.asList("one", "two", "three", "four", "five");
 			
-			mergeLists(first, second);
+			List<String> actual = mergeLists(first, second);
 		});
 	}
 	
