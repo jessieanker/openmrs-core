@@ -1835,7 +1835,6 @@ public class OpenmrsUtil {
 	 * @param password string that will be validated
 	 * @param systemId system id of the user with password to be validated
 	 * @throws PasswordException
-	 * @since 1.5
 	 * <strong>Should</strong> fail with short password by default
 	 * <strong>Should</strong> fail with short password if not allowed
 	 * <strong>Should</strong> pass with short password if allowed
